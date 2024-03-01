@@ -60,11 +60,11 @@ const Sidebar = () => {
           <div className={`text-gray-950 flex items-center mt-7 ml-2 mr-4 p-2 rounded-xl space-x-2 cursor-pointer`}>
             <span className="font-medium text-xs">Main tools</span>
           </div>
-          <div className={`flex items-center ml-4 mr-4 p-2 rounded-lg space-x-2 cursor-pointer ${getStyleForItem('dashboard')}`} onClick={() => handleItemClick('upload', '/upload')}>
+          <div className={`flex items-center ml-4 mr-4 p-2 rounded-lg space-x-2 cursor-pointer ${getStyleForItem('upload')}`} onClick={() => handleItemClick('upload', '/upload')}>
             <MdOutlineFileUpload size={20} />
             <span className="font-medium text-sm">Upload data</span>
           </div>
-          <div className={`flex items-center ml-4 mr-4 p-2 rounded-lg space-x-2 cursor-pointer ${getStyleForItem('applications')}`} onClick={() => handleItemClick('results', '/results')}>
+          <div className={`flex items-center ml-4 mr-4 p-2 rounded-lg space-x-2 cursor-pointer ${getStyleForItem('results')}`} onClick={() => handleItemClick('results', '/results')}>
             <TbFileAnalytics size={20} />
             <span className="font-medium text-sm">Results</span>
           </div>
@@ -87,7 +87,7 @@ const Sidebar = () => {
             <p className="mb-3 text-xs font-medium text-slate-600">
               Check out the documentation for the API.
             </p>
-            <button className="px-6 py-2 border border-transparent text-xs font-normal rounded-md text-white bg-gray-950 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+            <button className="px-6 py-2 border border-transparent text-xs font-semibold rounded-md text-white bg-gray-950 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
               Take me there
             </button>
           </div>

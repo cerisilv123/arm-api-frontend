@@ -3,6 +3,7 @@ import { Route, BrowserRouter as Router, Routes, Navigate } from 'react-router-d
 
 import './App.css';
 import AppLayout from './components/AppLayout';
+import UploadPage from './pages/UploadPage';
 
 const TestPage = () => {
   return (
@@ -20,7 +21,7 @@ function App() {
           <Routes>
             <Route 
                   path="/upload" 
-                  element={<AppLayout isSidebarExpanded={true}><TestPage /></AppLayout>}
+                  element={<AppLayout isSidebarExpanded={true}><UploadPage /></AppLayout>}
             />       
             <Route 
                   path="/results" 

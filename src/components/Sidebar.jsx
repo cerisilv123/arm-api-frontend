@@ -14,7 +14,7 @@
  */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MdOutlineFileUpload } from 'react-icons/md';
+import { MdOutlineFileUpload, MdOutlineQuestionMark } from 'react-icons/md';
 import { TbFileAnalytics } from "react-icons/tb";
 import { GoSidebarExpand, GoSidebarCollapse } from "react-icons/go";
 
@@ -34,9 +34,9 @@ const Sidebar = () => {
 
   const getStyleForItem = (item) => {
     if (item === selectedItem) {
-      return "bg-gray-100 fill-orange-400 text-orange-400";
+      return "bg-gray-950 fill-gray-950 text-white";
     } else {
-      return "text-slate-600";
+      return "text-gray-950";
     }
   };
 
@@ -44,7 +44,7 @@ const Sidebar = () => {
     <div className={`fixed top-0 transition-width duration-300 ${isOpen ? 'w-56' : 'w-0'} h-full flex flex-col border-r border-gray-200`}>
       <div className="flex items-center mt-6">
         {isOpen && (
-          <span className="text-md font-bold text-slate-600 ml-6">upsellr.</span>
+          <span className="text-md font-bold text-gray-950 ml-6">upsellr.</span>
         )}
         <div className={`ml-auto ${isOpen ? 'mr-6' : 'ml-6'}`}>
           {
@@ -57,7 +57,7 @@ const Sidebar = () => {
       {isOpen && (
         <>
         <div>
-          <div className={`text-slate-500 flex items-center mt-7 ml-2 mr-4 p-2 rounded-xl space-x-2 cursor-pointer`}>
+          <div className={`text-gray-950 flex items-center mt-7 ml-2 mr-4 p-2 rounded-xl space-x-2 cursor-pointer`}>
             <span className="font-medium text-xs">Main tools</span>
           </div>
           <div className={`flex items-center ml-4 mr-4 p-2 rounded-lg space-x-2 cursor-pointer ${getStyleForItem('dashboard')}`} onClick={() => handleItemClick('upload', '/upload')}>
@@ -77,17 +77,17 @@ const Sidebar = () => {
             <MdOutlineQuestionMark size={20} />
             <span className="font-medium text-sm">Get help</span>
           </div>  
-          <div className="items-center px-5 py-4 rounded-lg mt-2 ml-3 mr-3 border shadow-md bg-gradient-to-bl from-pink-100 from-10% via-white via-30% to-white to-90%">
+          <div className="items-center px-5 py-4 rounded-lg mt-2 ml-3 mr-3 border shadow-md bg-gradient-to-bl from-gray-200 from-10% via-white via-30% to-white to-90%">
             <div className="flex">
               <div className="mb-3  mr-2 rounded-full">
-                <img src={badge} alt="Find out more star" className="h-8 w-8 text-pink-600" />
+                <img src={badge} alt="Find out more star" className="h-8 w-8 text-gray-600" />
               </div>
-              <h3 className="mb-4 mt-1 text-md font-semibold text-slate-700">DOCUMENTATION</h3>
+              <h3 className="mb-4 mt-1 text-md font-semibold text-slate-700">DOCS</h3>
             </div>
             <p className="mb-3 text-xs font-medium text-slate-600">
               Check out the documentation for the API.
             </p>
-            <button className="px-6 py-2 border border-transparent text-xs font-normal rounded-md text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+            <button className="px-6 py-2 border border-transparent text-xs font-normal rounded-md text-white bg-gray-950 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
               Take me there
             </button>
           </div>

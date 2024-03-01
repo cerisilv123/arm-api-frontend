@@ -1,24 +1,38 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import { Route, BrowserRouter as Router, Routes, Navigate } from 'react-router-dom';
+
 import './App.css';
+import AppLayout from './components/AppLayout';
+
+const TestPage = () => {
+  return (
+    <div>
+      <h1>Test Page</h1>
+      <p>This is a test page to demonstrate the concept of routing with different sidebar states.</p>
+    </div>
+  );
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+        <div>
+          <Routes>
+            <Route 
+                  path="/upload" 
+                  element={<AppLayout isSidebarExpanded={true}><TestPage /></AppLayout>}
+            />       
+            <Route 
+                  path="/results" 
+                  element={<AppLayout isSidebarExpanded={true}><TestPage /></AppLayout>}
+            />      
+            <Route 
+                  path="/results-page" 
+                  element={<AppLayout isSidebarExpanded={true}><TestPage /></AppLayout>}
+            />      
+          </Routes>
+        </div>
+    </Router>
   );
 }
 

@@ -21,7 +21,7 @@ import axios from 'axios';
 
 const ResultsPage = () => {
 
-    const [data, setData] = useState('');
+    const [transactions, setTransactions] = useState('');
     const [algorithm, setAlgorithm] = useState('');
     const [supportThreshold, setSupportThreshold] = useState('');
     const [confidenceThreshold, setConfidenceThreshold] = useState('');
@@ -31,13 +31,13 @@ const ResultsPage = () => {
         event.preventDefault();
 
         const data = {
-            "data": data,
+            "transactions": transactions,
             "algorithm": algorithm,
-            "supportThreshold": supportThreshold,
-            "confidenceThreshold": confidenceThreshold,
+            "support_threshold": supportThreshold,
+            "confidence_threshold": confidenceThreshold,
         };
 
-        axios.post('/http://localhost:5000/arm/api/mine', data)
+        axios.post('http://localhost:5000/arm/api/mine', data)
           .then(function (response) {
             console.log(response);
           })
@@ -56,7 +56,7 @@ const ResultsPage = () => {
                 complete: function(results) {
                     const data = results.data; 
                     console.log("Parsed CSV data: ", data);
-                    setData(data);
+                    setTransactions(data);
                 },
                 error: function(err) {
                     console.error("Error parsing the CSV file data: ", err);
@@ -72,7 +72,7 @@ const ResultsPage = () => {
                     const sheet = workbook.Sheets[firstSheet];
                     const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
                     console.log("Excel data:", data);
-                    setData(data);
+                    setTransactions(data);
                 } catch (error) {
                     console.log("Error parsing excel file: ", error)
                 }
@@ -117,6 +117,14 @@ const ResultsPage = () => {
                 checked={algorithm === 'apriori'}
                 onChange={() => setAlgorithm('apriori')}
                 /> Apriori
+            </label><br/>
+            <label className='text-gray-950 font-normal'>
+                <input
+                type="radio"
+                value="apriori-ceri"
+                checked={algorithm === 'apriori-ceri'}
+                onChange={() => setAlgorithm('apriori-ceri')}
+                /> AprioriCeri
             </label>
             </div>
             <div className='mt-7'>

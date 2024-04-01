@@ -33,9 +33,11 @@ const ResultsPage = () => {
         const data = {
             "transactions": transactions,
             "algorithm": algorithm,
-            "support_threshold": supportThreshold,
-            "confidence_threshold": confidenceThreshold,
+            "support_threshold": parseFloat(supportThreshold),
+            "confidence_threshold": parseFloat(confidenceThreshold),
         };
+
+        console.log(data);
 
         axios.post('http://localhost:5000/arm/api/mine', data)
           .then(function (response) {
@@ -55,8 +57,11 @@ const ResultsPage = () => {
             Papa.parse(file, {
                 complete: function(results) {
                     const data = results.data; 
-                    console.log("Parsed CSV data: ", data);
-                    setTransactions(data);
+                    const cleanedData = data.map(row => 
+                        row.filter(item => item !== null && item !== undefined && item !== '')
+                    );
+                    console.log("Parsed CSV data: ", cleanedData);
+                    setTransactions(cleanedData);
                 },
                 error: function(err) {
                     console.error("Error parsing the CSV file data: ", err);
@@ -71,8 +76,11 @@ const ResultsPage = () => {
                     const firstSheet = workbook.SheetNames[0]; // Accesses the first page in an excel workbook
                     const sheet = workbook.Sheets[firstSheet];
                     const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-                    console.log("Excel data:", data);
-                    setTransactions(data);
+                    const cleanedData = data.map(row => 
+                        row.filter(item => item !== null && item !== undefined && item !== '')
+                    );
+                    console.log("Excel data:", cleanedData);
+                    setTransactions(cleanedData);
                 } catch (error) {
                     console.log("Error parsing excel file: ", error)
                 }

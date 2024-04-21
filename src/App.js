@@ -4,6 +4,12 @@ import { Route, BrowserRouter as Router, Routes, Navigate } from 'react-router-d
 import './App.css';
 import AppLayout from './components/AppLayout';
 import UploadPage from './pages/UploadPage';
+import ResultsPage from './pages/ResultsPage';
+
+// Registering Syncfusion license key
+import { registerLicense } from '@syncfusion/ej2-base';
+
+registerLicense('Ngo9BigBOggjHTQxAR8/V1NBaF5cXmZCekx0TXxbf1x0ZFRGalhXTnRaUiweQnxTdEFjXX1fcXRRQGJZWEN2Xg==');
 
 const TestPage = () => {
   return (
@@ -25,12 +31,8 @@ function App() {
             />       
             <Route 
                   path="/results" 
-                  element={<AppLayout isSidebarExpanded={true}><TestPage /></AppLayout>}
-            />      
-            <Route 
-                  path="/results-page" 
-                  element={<AppLayout isSidebarExpanded={true}><TestPage /></AppLayout>}
-            />      
+                  element={<AppLayout isSidebarExpanded={true}><ResultsPage /></AppLayout>}
+            />        
           </Routes>
         </div>
     </Router>

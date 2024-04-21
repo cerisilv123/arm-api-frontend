@@ -39,7 +39,7 @@ const ResultsPage = () => {
 
         console.log(data);
 
-        axios.post('http://localhost:5000/arm/api/mine', data)
+        axios.post('http://127.0.0.1:5000/arm/api/mine', data)
           .then(function (response) {
             console.log(response);
           })

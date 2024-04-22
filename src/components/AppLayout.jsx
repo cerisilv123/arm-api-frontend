@@ -31,7 +31,7 @@ const AppLayout = ({ isSidebarExpanded, children }) => {
     <div className='flex'>
         <Navbar/>
         <Sidebar/>
-        <div className={`flex-grow w-full mt-20 mr-24 px-8 ${isSidebarExpanded ? 'ml-96' : 'ml-28'}`}>
+        <div className={`flex-grow w-full mt-20 mr-6 px-8 ${isSidebarExpanded ? 'ml-60' : 'ml-28'}`}>
             {children}
         </div>
     </div>

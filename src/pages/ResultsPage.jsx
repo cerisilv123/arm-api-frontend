@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, ExcelExport, PdfExport, Edit, Inject, Search, Toolbar } from '@syncfusion/ej2-react-grids';
 import axios from 'axios';
+import { AlertPopUp } from '../components';
 
 const ResultsPage = () => {
 
@@ -42,6 +43,8 @@ const ResultsPage = () => {
         })
         .catch((error) => {
           console.log(error);
+          const message = `Error fetching results data: ${error}.`;
+          <AlertPopUp message={message} isSuccess={false}/>
         })
       }
       fetchData();

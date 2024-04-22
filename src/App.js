@@ -5,6 +5,7 @@ import './App.css';
 import AppLayout from './components/AppLayout';
 import UploadPage from './pages/UploadPage';
 import ResultsPage from './pages/ResultsPage';
+import ResultPage from './pages/ResultPage';
 
 // Registering Syncfusion license key
 import { registerLicense } from '@syncfusion/ej2-base';
@@ -32,7 +33,11 @@ function App() {
             <Route 
                   path="/results" 
                   element={<AppLayout isSidebarExpanded={true}><ResultsPage /></AppLayout>}
-            />        
+            />    
+            <Route 
+                  path="/results/:id"
+                  element={<AppLayout isSidebarExpanded={true}><ResultPage /></AppLayout>}
+            />    
           </Routes>
         </div>
     </Router>

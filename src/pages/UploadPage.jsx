@@ -18,6 +18,7 @@ import React, { useState } from 'react';
 import Papa from 'papaparse';
 import * as XLSX from 'xlsx';
 import axios from 'axios';
+import { AlertPopUp } from '../components';
 
 const ResultsPage = () => {
 
@@ -25,6 +26,10 @@ const ResultsPage = () => {
     const [algorithm, setAlgorithm] = useState('');
     const [supportThreshold, setSupportThreshold] = useState('');
     const [confidenceThreshold, setConfidenceThreshold] = useState('');
+    const [alertPopupKey, setAlertPopupKey] = useState(0); // Increment this as a counter
+    const [alertMessage, setAlertMessage] = useState(null);
+    const [isSuccess, setIsSuccess] = useState(true); // true if alert has been added successfully
+
 
     // Handler for submitting the form data to ARM API using axios
     const handleSubmit = (event) => {
@@ -42,10 +47,28 @@ const ResultsPage = () => {
         axios.post('http://127.0.0.1:5000/arm/api/mine', data)
           .then(function (response) {
             console.log(response);
+            if (response.data.error) {
+                console.log("In error");
+                const message = `Error mining results: ${response.data.error.message}`;
+                setAlertMessage(message);
+                setIsSuccess(false);
+                setAlertPopupKey(prevKey => prevKey + 1);
+            }
+            else {
+                const id = response.data.success.data.id;
+                const message = `Results mined successfully!`;
+                setAlertMessage(message);
+                setIsSuccess(true);
+                window.location.replace(`/results/${id}`);
+                setAlertPopupKey(prevKey => prevKey + 1);
+            }
           })
           .catch(function (error) {
-            console.log("Error making POST request: ", error);
-          });
+            const message = `Error mining results: ${error}.`;
+            setAlertMessage(message);
+            setIsSuccess(false);
+            setAlertPopupKey(prevKey => prevKey + 1);
+        });
     };
 
     // Handler for converting parsing uploaded files into arrays (CSV & Excel)
@@ -93,70 +116,71 @@ const ResultsPage = () => {
     };
 
     return (
-        <div>
-        <h1 className='mt-5 text-gray-950 text-3xl font-bold'>Upload data set</h1>
-        <p className='mt-5 text-gray-950 text-sm font-medium'>Upload your transactional data set in CSV or Excel format to analyse it using popular Association Rule Mining algorithms (FP-Growth and Apriori). Specify your confidence and support thresholds to uncover meaningful associations within your data. you can uncover rules that reveal how certain items are connected. This can help you make informed decisions about which items to sell together.</p>
-        <form className='mt-7' onSubmit={handleSubmit}>
-            <div>
-            <label className='font-semibold' htmlFor="dataFile">Upload a file in CSV or XLS format:</label><br/>
-            <input 
-                className='mt-2'
-                type="file"
-                id="dataFile"
-                accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                onChange={handleFileInput}
-            /><br/>
-            </div>
-            <div className='mt-7'>
-            <label className='text-gray-950 font-semibold'>Select Algorithm:</label><br/>
-            <label className='text-gray-950 font-normal'>
+        <div className="m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl border-solid border-1">
+            <h1 className='mt-5 text-gray-950 text-3xl font-bold'>Upload data set</h1>
+            <p className='mt-5 text-gray-950 text-sm font-medium'>Upload your transactional data set in CSV or Excel format to analyse it using popular Association Rule Mining algorithms (FP-Growth and Apriori). Specify your confidence and support thresholds to uncover meaningful associations within your data. you can uncover rules that reveal how certain items are connected. This can help you make informed decisions about which items to sell together.</p>
+            <form className='mt-7' onSubmit={handleSubmit}>
+                <div>
+                <label className='font-semibold' htmlFor="dataFile">Upload a file in CSV or XLS format:</label><br/>
+                <input 
+                    className='mt-2'
+                    type="file"
+                    id="dataFile"
+                    accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    onChange={handleFileInput}
+                /><br/>
+                </div>
+                <div className='mt-7'>
+                <label className='text-gray-950 font-semibold'>Select Algorithm:</label><br/>
+                <label className='text-gray-950 font-normal'>
+                    <input
+                    className='mt-2'
+                    type="radio"
+                    value="fpgrowth"
+                    checked={algorithm === 'fpgrowth'}
+                    onChange={() => setAlgorithm('fpgrowth')}
+                    /> FP-Growth
+                </label><br/>
+                <label className='text-gray-950 font-normal'>
+                    <input
+                    type="radio"
+                    value="apriori"
+                    checked={algorithm === 'apriori'}
+                    onChange={() => setAlgorithm('apriori')}
+                    /> Apriori
+                </label><br/>
+                <label className='text-gray-950 font-normal'>
+                    <input
+                    type="radio"
+                    value="apriori-ceri"
+                    checked={algorithm === 'apriori-ceri'}
+                    onChange={() => setAlgorithm('apriori-ceri')}
+                    /> AprioriCeri
+                </label>
+                </div>
+                <div className='mt-7'>
+                <label className='font-semibold' htmlFor="supportThreshold">Support Threshold: </label>
                 <input
-                className='mt-2'
-                type="radio"
-                value="fpgrowth"
-                checked={algorithm === 'fpgrowth'}
-                onChange={() => setAlgorithm('fpgrowth')}
-                /> FP-Growth
-            </label><br/>
-            <label className='text-gray-950 font-normal'>
+                    type="number"
+                    id="supportThreshold"
+                    value={supportThreshold}
+                    onChange={(e) => setSupportThreshold(e.target.value)}
+                    placeholder="Enter value"
+                />
+                </div>
+                <div className='mt-2'>
+                <label className='font-semibold' htmlFor="confidenceThreshold">Confidence Threshold: </label>
                 <input
-                type="radio"
-                value="apriori"
-                checked={algorithm === 'apriori'}
-                onChange={() => setAlgorithm('apriori')}
-                /> Apriori
-            </label><br/>
-            <label className='text-gray-950 font-normal'>
-                <input
-                type="radio"
-                value="apriori-ceri"
-                checked={algorithm === 'apriori-ceri'}
-                onChange={() => setAlgorithm('apriori-ceri')}
-                /> AprioriCeri
-            </label>
-            </div>
-            <div className='mt-7'>
-            <label className='font-semibold' htmlFor="supportThreshold">Support Threshold: </label>
-            <input
-                type="number"
-                id="supportThreshold"
-                value={supportThreshold}
-                onChange={(e) => setSupportThreshold(e.target.value)}
-                placeholder="Enter value"
-            />
-            </div>
-            <div className='mt-2'>
-            <label className='font-semibold' htmlFor="confidenceThreshold">Confidence Threshold: </label>
-            <input
-                type="number"
-                id="confidenceThreshold"
-                value={confidenceThreshold}
-                onChange={(e) => setConfidenceThreshold(e.target.value)}
-                placeholder="Enter value"
-            />
-            </div>
-            <button className="mt-5 px-6 py-2 border border-transparent text-md font-semibold rounded-md text-white bg-gray-950 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" type="submit">Mine rules</button>
-        </form>
+                    type="number"
+                    id="confidenceThreshold"
+                    value={confidenceThreshold}
+                    onChange={(e) => setConfidenceThreshold(e.target.value)}
+                    placeholder="Enter value"
+                />
+                </div>
+                <button className="mt-5 px-6 py-2 border border-transparent text-md font-semibold rounded-md text-white bg-gray-950 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" type="submit">Mine rules</button>
+            </form>
+            {alertMessage && <AlertPopUp key={alertPopupKey} message={isSuccess ? "Alert successfully added to the system." : alertMessage} isSuccess={isSuccess} />}
         </div>
     );
 };

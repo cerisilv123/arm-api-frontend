@@ -19,20 +19,33 @@ const ResultsPage = () => {
       }
     };
 
+    const rowSelected = (args) => {
+      if (grid) 
+      {
+        // Get the id and redirect to page/{id} route
+        const selectedRecord = grid.getSelectedRecords();
+        const target = args.target; // Get the element that triggered the function (checkbox or row selected)
+        if (selectedRecord.length === 1 && target.classList.contains('e-selectionbackground')) // this means no checkboxes are ticked
+        {
+            const selectedRecordJSON = JSON.stringify(selectedRecord);
+            const id = JSON.parse(selectedRecordJSON)[0].id;
+            window.location.replace(`/results/${id}`);
+        }
+      }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const response = await axios.get('http://127.0.0.1:5000/arm/api/results');
-            console.log(response);
-            setData(response.success.data);
-            console.log(data);
-          } catch (error) {
-            console.error('Error fetching results data: ', error);
-          }
-        };
-    
-        fetchData();
-      }, []);
+      async function fetchData() {
+        await axios.get('http://127.0.0.1:5000/arm/api/results')
+        .then((response) => {
+          setData(response.data.success.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      }
+      fetchData();
+    }, [])
 
     return (
         <div className="m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl border-solid border-1">
@@ -45,11 +58,16 @@ const ResultsPage = () => {
               allowSorting
               allowFiltering
               filterSettings={FilterOptions}
+              allowPdfExport={true}
+              allowExcelExport={true}
+              toolbarClick={toolbarClick}
+              rowSelected={rowSelected}
+              ref={g => grid = g}
             >              
                 <ColumnsDirective>
-                    <ColumnDirective field='id' width='100'/>
-                    <ColumnDirective field='rules.rule' width='100'/>
-                    <ColumnDirective field='count' width='100'/>
+                    <ColumnDirective field='id' headerText="Result ID" width='100'/>
+                    <ColumnDirective field='algorithm' headerText="Algorithm" width='100'/>
+                    <ColumnDirective field='date_added' headerText="Date Added" width='100'/>
                 </ColumnsDirective>
                 <Inject services={[ Resize, Sort, ContextMenu, Filter, Page, ExcelExport, Edit, PdfExport, Search, Toolbar ]}/>
             </GridComponent>
